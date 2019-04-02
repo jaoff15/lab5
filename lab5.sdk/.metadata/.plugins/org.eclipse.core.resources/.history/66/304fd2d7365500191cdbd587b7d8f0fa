@@ -1,0 +1,26 @@
+/*
+ * types.h
+ *
+ *  Created on: Apr 2, 2019
+ *      Author: jacoboffersen
+ */
+
+#ifndef SRC_TYPES_H_
+#define SRC_TYPES_H_
+
+
+u8 matrix[8][8][3]:
+
+typedef struct position_t{
+	u8 x;
+	u8 y;
+} position_t;
+
+typedef struct color_t{
+	u8 r;
+	u8 g;
+	u8 b;
+} color_t;
+
+
+#endif /* SRC_TYPES_H_ */

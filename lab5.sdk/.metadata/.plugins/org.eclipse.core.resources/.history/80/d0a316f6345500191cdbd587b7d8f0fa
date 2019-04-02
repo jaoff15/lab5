@@ -1,0 +1,15 @@
+/*
+ * led_matrix.h
+ *
+ *  Created on: Apr 2, 2019
+ *      Author: jacoboffersen
+ */
+
+#ifndef SRC_LED_MATRIX_H_
+#define SRC_LED_MATRIX_H_
+
+#include "xparameters.h"
+#include "xbram.h"
+#include "xil_io.h"
+
+#endif /* SRC_LED_MATRIX_H_ */

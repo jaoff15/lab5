@@ -1,0 +1,48 @@
+/*
+ * led_matrix.c
+ *
+ *  Created on: Apr 2, 2019
+ *      Author: jacoboffersen
+ */
+
+#include "led_matrix.h"
+
+
+void initLedMatrix(){
+
+	clearMemory();
+
+
+}
+
+
+
+
+
+
+// Function to reset memory
+void clearMemory(){
+	for(u8 col = 0; col < 8; col++){
+		for(u8 row = 0; row < 8; row++){
+			render(col, row, 0, 0, 0);
+		}
+	}
+}
+
+
+// Function to render a pixel to the display
+void render(u8 x, u8 y, u8 r, u8 g, u8 b){
+	u32 addr = XPAR_BRAM_0_BASEADDR + x*4 + y*32;
+	u32 value = 0x00000000;
+	value +=(r << 16);
+	value +=(g << 8);
+	value +=(b);
+	ledMatrixOut(addr, value);
+}
+
+// Write pixel value to the LED matrix
+void ledMatrixOut(u32 addr, u32 data){
+	Xil_Out32(addr, data);
+}
+
+

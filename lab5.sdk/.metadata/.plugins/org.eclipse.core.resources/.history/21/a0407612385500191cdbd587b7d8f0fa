@@ -1,0 +1,36 @@
+/*
+ * led_matrix.h
+ *
+ *  Created on: Apr 2, 2019
+ *      Author: jacoboffersen
+ */
+
+#ifndef SRC_LED_MATRIX_H_
+#define SRC_LED_MATRIX_H_
+
+#include "xparameters.h"
+#include "xbram.h"
+#include "xil_io.h"
+#include "types.h"
+
+
+
+u8 matrix[8][8][3];
+
+
+void initLedMatrix();
+
+void ledMatrixOut(u32 addr, u32 data);
+
+
+void setPixelOnDevice(position_t pos, color_t col);
+void setPixelValueOnDevice(u8 x, u8 y, u8 r, u8 g, u8 b);
+
+void writePixelToDevice(position_t pos);
+
+
+void clearMemory();
+
+
+
+#endif /* SRC_LED_MATRIX_H_ */
