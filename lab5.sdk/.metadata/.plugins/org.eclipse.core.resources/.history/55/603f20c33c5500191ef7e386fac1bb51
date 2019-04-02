@@ -1,0 +1,45 @@
+/*
+ * types.h
+ *
+ *  Created on: Apr 2, 2019
+ *      Author: jacoboffersen
+ */
+
+#ifndef SRC_TYPES_H_
+#define SRC_TYPES_H_
+
+
+// A struct type that can contain a pixel position
+typedef struct position_t{
+	u8 x;
+	u8 y;
+} position_t;
+
+// A struct type that can contain a pixel color
+typedef struct color_t{
+	u8 r;
+	u8 g;
+	u8 b;
+} color_t;
+
+
+// Array indices for the three different colors
+#define R 	0
+#define G 	1
+#define B 	2
+
+static const color_t RED    = {.r = 255, .g = 0,   .b = 0};
+static const color_t GREEN  = {.r = 0,   .g = 255, .b = 0};
+static const color_t BLUE 	 = {.r = 0,   .g = 0,   .b = 255};
+static const color_t YELLOW = {.r = 255, .g = 255, .b = 0};
+static const color_t ORANGE = {.r = 255, .g = 120, .b = 0};
+static const color_t PURPLE = {.r = 100, .g = 0,   .b = 150};
+static const color_t WHITE  = {.r = 255, .g = 255, .b = 255};
+static const color_t NONE 	 = {.r = 0,   .g = 0,   .b = 0};
+
+
+
+
+
+#endif /* SRC_TYPES_H_ */
+

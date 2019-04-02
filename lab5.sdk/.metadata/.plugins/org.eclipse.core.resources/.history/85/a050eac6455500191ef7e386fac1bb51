@@ -1,0 +1,108 @@
+
+#include <stdio.h>
+#include "platform.h"
+#include "xil_printf.h"
+#include "led_matrix.h"
+#include <math.h>
+#include <stdlib.h>
+
+#define MIN_X 0
+#define MAX_X 7
+#define MIN_Y 0
+#define MAX_Y 7
+#define MIN_R 50
+#define MAX_R 255
+#define MIN_G 50
+#define MAX_G 255
+#define MIN_B 50
+#define MAX_B 100
+
+
+int main()
+{
+    init_platform();
+
+    initLedMatrix();
+
+    runningLed();
+
+//    randomPixel();
+//    gradient();
+
+
+
+    cleanup_platform();
+    return 0;
+}
+
+void runningLed(){
+	position_t pos;
+	direction_t dir = UP;
+	while(1){
+
+		for(u8 col = 0; col < 8; col++){
+			for(u8 row = 0; row < 8; row++){
+				switch(dir){
+				case UP:
+					pos.x = row;
+					pos.y = col;
+					break;
+				case LEFT:
+					pos.x = col;
+					pos.y = row;
+					break;
+				case DOWN:
+					pos.x = 7 - row;
+					pos.y = 7 - col;
+					break;
+				case RIGHT:
+					pos.x = 7 - col;
+					pos.y = 7- row;
+					break;
+				default:
+					dir = UP;
+				}
+
+				setPixel(pos, YELLOW);
+				writePixelToDevice(pos);
+				usleep(MS_500);
+				setPixel(pos, NONE);
+				writePixelToDevice(pos);
+			}
+		}
+		dir++;
+
+		// Overflow control
+		if(dir == 4){
+			dir = UP;
+		}
+	}
+}
+
+
+void randomPixel(){
+    position_t pos;
+    color_t    col;
+	while(1){
+    	pos.x = floor(rand() % MAX_X + MIN_X);
+    	pos.y = floor(rand() % MAX_Y + MIN_Y);
+    	col.r = floor(rand() % MAX_R + MIN_R);
+    	col.g = floor(rand() % MAX_G + MIN_G);
+    	col.b = floor(rand() % MAX_B + MIN_B);
+    	resetAllPixels();
+    	setPixel(pos,col);
+    	writeAllPixelToDevice();
+    	usleep(SEC_1);
+
+    }
+}
+
+void gradient(){
+	for(u8 col = 0; col < 8; col++){
+		for(u8 row = 0; row < 8; row++){
+			setPixelValue(col, row, row*10, col*10, 0);
+		}
+	}
+	writeAllPixelToDevice();
+}
+

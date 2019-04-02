@@ -11,39 +11,69 @@
 
 // Initialize the LED matrix
 void initLedMatrix(){
-	clearMemory();
+	resetAllPixels();
+	writeAllPixelToDevice();
 }
 
 // Function to reset memory
-void clearMemory(){
-	for(u8 col = 0; col < 8; col++){
-		for(u8 row = 0; row < 8; row++){
-			setPixelValue(col, row, 0, 0, 0);
+void resetAllPixels(){
+	for(u8 y = 0; y < 8; y++){
+		for(u8 x = 0; x < 8; x++){
+			setPixelValue(x, y, 0, 0, 0);
 		}
 	}
 }
 
-
-
 // Writes r, g and b colors to the specified x,y pixel
 void setPixelValue(u8 x, u8 y, u8 r, u8 g, u8 b){
-	matrix[x][y][RED] = r;
-	matrix[x][y][GREEN] = g;
-	matrix[x][y][BLUE] = b;
+	matrix[x][y][R] = r;
+	matrix[x][y][G] = g;
+	matrix[x][y][B] = b;
 }
 
 // Write the col specified by the col struct to the position specified
 void setPixel(position_t pos, color_t col){
-	matrix[pos.x][pos.y][RED] = col.r;
-	matrix[pos.x][pos.y][GREEN] = col.g;
-	matrix[pos.x][pos.y][BLUE] = col.b;
+	matrix[pos.x][pos.y][R] = col.r;
+	matrix[pos.x][pos.y][G] = col.g;
+	matrix[pos.x][pos.y][B] = col.b;
+}
+void getPixel(position_t pos, color_t *col){
+	col->r = matrix[pos.x][pos.y][R];
+	col->g = matrix[pos.x][pos.y][G];
+	col->b = matrix[pos.x][pos.y][B];
+}
+
+// Decrement specified pixel
+void decrementPixel(position_t pos){
+	color_t col;
+	u8 fadeFactor = 1;
+	getPixel(pos, &col);
+	if(col.r >= fadeFactor){
+		col.r -= fadeFactor;
+	}
+	else{
+		col.r = 0;
+	}
+	if(col.g >= fadeFactor){
+		col.g -= fadeFactor;
+	}
+	else{
+		col.g = 0;
+	}
+	if(col.b >= fadeFactor){
+		col.b -= fadeFactor;
+	}
+	else{
+		col.b = 0;
+	}
+	setPixel(pos, col);
 }
 
 // Writes the specified pixel to the device
 void writePixelToDevice(position_t pos){
-	u8 r = matrix[pos.x][pos.y][RED];
-	u8 g = matrix[pos.x][pos.y][GREEN];
-	u8 b = matrix[pos.x][pos.y][BLUE];
+	u8 r = matrix[pos.x][pos.y][R];
+	u8 g = matrix[pos.x][pos.y][G];
+	u8 b = matrix[pos.x][pos.y][B];
 	u32 addr = XPAR_BRAM_0_BASEADDR + pos.x*4 + pos.y*32;
 	u32 value = (r << 16) + (g << 8) + b;
 	ledMatrixOut(addr, value);
@@ -52,34 +82,19 @@ void writePixelToDevice(position_t pos){
 // Writes all pixel values to the device
 void writeAllPixelToDevice(){
 	position_t pos;
-	for(u8 col = 0; col < 8; col++){
-		for(u8 row = 0; row < 8; row++){
-			pos.x = row;
-			pos.y = col;
+	for(u8 y = 0; y < 8; y++){
+		for(u8 x = 0; x < 8; x++){
+			pos.x = x;
+			pos.y = y;
 			writePixelToDevice(pos);
 		}
 	}
 }
 
-//
-//// Function to set the color of one pixel on the device
-//void setPixelValueOnDevice(u8 x, u8 y, u8 r, u8 g, u8 b){
-//	u32 addr = XPAR_BRAM_0_BASEADDR + x*4 + y*32;
-//	u32 value = (r << 16) + (g << 8) + b;
-//	ledMatrixOut(addr, value);
-//}
-//
-//// Function to set the color of one pixel on the device
-//void setPixelOnDevice(position_t pos, color_t col){
-//	u32 addr = XPAR_BRAM_0_BASEADDR + pos.x*4 + pos.y*32;
-//	u32 value = (col.r << 16) + (col.g << 8) + col.b;
-//	ledMatrixOut(addr, value);
-//}
-
-
 // Write pixel value to the LED matrix
 void ledMatrixOut(u32 addr, u32 data){
 	Xil_Out32(addr, data);
 }
+
 
 
